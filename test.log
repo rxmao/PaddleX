@@ -1,0 +1,166 @@
+nohup: ignoring input
+开始测试 15 个模型...
+
+[1/15] 测试 PP-LCNet_x1_0_doc_ori...
+[32mUsing official model (PP-LCNet_x1_0_doc_ori), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+/opt/conda/lib/python3.10/site-packages/paddle/utils/cpp_extension/extension_utils.py:703: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+I1120 21:17:22.308012 1657526 init.cc:238] ENV [CUSTOM_DEVICE_ROOT]=/opt/conda/lib/python3.10/site-packages/paddle_custom_device
+I1120 21:17:22.308041 1657526 init.cc:146] Try loading custom device libs from: [/opt/conda/lib/python3.10/site-packages/paddle_custom_device]
+I1120 21:17:25.315418 1657526 custom_device_load.cc:51] Succeed in loading custom runtime in lib: /opt/conda/lib/python3.10/site-packages/paddle_custom_device/libpaddle-metax-gpu.so
+I1120 21:17:25.315465 1657526 custom_device_load.cc:58] Skipped lib [/opt/conda/lib/python3.10/site-packages/paddle_custom_device/libpaddle-metax-gpu.so]: no custom engine Plugin symbol in this lib.
+I1120 21:17:25.324950 1657526 custom_kernel.cc:68] Succeed in loading 954 custom kernel(s) from loaded lib(s), will be used like native ones.
+I1120 21:17:25.325345 1657526 init.cc:158] Finished in LoadCustomDevice with libs_path: [/opt/conda/lib/python3.10/site-packages/paddle_custom_device]
+I1120 21:17:25.325381 1657526 init.cc:244] CustomDevice: metax_gpu, visible devices count: 1
+❌ PP-LCNet_x1_0_doc_ori 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[2/15] 测试 UVDoc...
+[32mUsing official model (UVDoc), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ UVDoc 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: Attribute 2 cast error in Op Kernel Context. (at /paddle/p
+
+[3/15] 测试 PP-DocBlockLayout...
+[32mUsing official model (PP-DocBlockLayout), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-DocBlockLayout 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[4/15] 测试 PP-DocLayout_plus-L...
+[32mUsing official model (PP-DocLayout_plus-L), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-DocLayout_plus-L 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[5/15] 测试 PP-LCNet_x1_0_textline_ori...
+[32mUsing official model (PP-LCNet_x1_0_textline_ori), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-LCNet_x1_0_textline_ori 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[6/15] 测试 PP-OCRv5_server_det...
+[32mUsing official model (PP-OCRv5_server_det), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-OCRv5_server_det 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[7/15] 测试 PP-OCRv5_server_rec...
+[32mUsing official model (PP-OCRv5_server_rec), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-OCRv5_server_rec 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[8/15] 测试 PP-OCRv4_server_seal_det...
+[32mUsing official model (PP-OCRv4_server_seal_det), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+[32m{'res': {'input_path': 'test.jpg', 'page_index': None, 'dt_polys': [array([[893, 859],
+       ...,
+       [893, 854]]), array([[514, 797],
+       ...,
+       [513, 796]]), array([[1319,  765],
+       ...,
+       [1315,  764]]), array([[632, 663],
+       ...,
+       [634, 665]]), array([[658, 635],
+       ...,
+       [657, 633]]), array([[396, 342],
+       ...,
+       [393, 342]]), array([[1299,  342],
+       ...,
+       [1298,  342]]), array([[1092,  353],
+       ...,
+       [1098,  355]])], 'dt_scores': [0.8416884982499353, 0.9066151842412328, 0.9094061464061639, 0.6036706717424495, 0.6091634165158415, 0.6202045178413391, 0.7272433171223316, 0.9460354737556282]}}[0m
+✅ PP-OCRv4_server_seal_det 测试成功! 耗时: 37083ms
+
+[9/15] 测试 PP-LCNet_x1_0_table_cls...
+[32mUsing official model (PP-LCNet_x1_0_table_cls), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-LCNet_x1_0_table_cls 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[10/15] 测试 SLANeXt_wired...
+[32mUsing official model (SLANeXt_wired), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ SLANeXt_wired 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[11/15] 测试 SLANet_plus...
+[32mUsing official model (SLANet_plus), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ SLANet_plus 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[12/15] 测试 RT-DETR-L_wired_table_cell_det...
+[32mUsing official model (RT-DETR-L_wired_table_cell_det), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ RT-DETR-L_wired_table_cell_det 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[13/15] 测试 RT-DETR-L_wireless_table_cell_det...
+[32mUsing official model (RT-DETR-L_wireless_table_cell_det), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ RT-DETR-L_wireless_table_cell_det 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[14/15] 测试 PP-FormulaNet_plus-L...
+[32mUsing official model (PP-FormulaNet_plus-L), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+❌ PP-FormulaNet_plus-L 测试失败!
+错误: In user code:
+
+
+    InvalidArgumentError: The custom eigen_device is nullptr. It must not be null.
+ 
+
+[15/15] 测试 PP-Chart2Table...
+[32mUsing official model (PP-Chart2Table), the model files will be automatically downloaded and saved in /root/.paddlex/official_models.[0m
+[32mSpecial tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.[0m
+[32mLoading configuration file /root/.paddlex/official_models/PP-Chart2Table/config.json[0m
+[32mLoading weights file /root/.paddlex/official_models/PP-Chart2Table/model_state.pdparams[0m
+[32mLoaded weights file from disk, setting weights to model.[0m
+[32mAll model checkpoint weights were used when initializing PPChart2TableInference.
+[0m
+[32mAll the weights of PPChart2TableInference were initialized from the model checkpoint at /root/.paddlex/official_models/PP-Chart2Table.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use PPChart2TableInference for predictions without further training.[0m
+[32mLoading configuration file /root/.paddlex/official_models/PP-Chart2Table/generation_config.json[0m
+❌ PP-Chart2Table 测试失败!
+错误: Not supported input data type! Only `Dict` or `List[Dict]` are supported, but got: <class 'str'>.
+
+============================================================
+测试完成! 成功: 1/15, 失败: 14/15
+============================================================
