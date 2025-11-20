@@ -107,7 +107,7 @@ class BasePipeline(ABC, metaclass=AutoRegisterABCMetaClass):
         model = create_predictor(
             model_name=config["model_name"],
             model_dir=model_dir,
-            device=self.device,
+            device=config.get("device", self.device),
             batch_size=config.get("batch_size", 1),
             pp_option=pp_option,
             use_hpip=use_hpip,
@@ -139,7 +139,7 @@ class BasePipeline(ABC, metaclass=AutoRegisterABCMetaClass):
 
         pipeline = create_pipeline(
             config=config,
-            device=self.device,
+            device=config.get("device", self.device),
             pp_option=(
                 self.pp_option.copy() if self.pp_option is not None else self.pp_option
             ),
