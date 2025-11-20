@@ -225,13 +225,24 @@ def run_pipeline_with_model(
     if not in_path.is_file():
         raise FileNotFoundError(f"文件不存在: {in_path}")
 
+    # 时间统计字典
+    time_stats = {}
+
     # 如果没有传入 pipeline，则创建新实例
     if pipeline is None:
         if device is None:
             device = DEFAULT_DEVICE
         if verbose:
             print(f"🔧 创建新pipeline，使用设备: {device}")
+
+        # 测量模型加载时间
+        pipeline_start = time.perf_counter()
         pipeline = create_pipeline("PP-StructureV3", device=device)
+        pipeline_load_time = (time.perf_counter() - pipeline_start) * 1000
+        time_stats['pipeline_load_time'] = pipeline_load_time
+
+        if verbose:
+            print(f"⏱️  Pipeline加载耗时: {pipeline_load_time:.2f}ms ({pipeline_load_time/1000:.2f}s)")
 
     # 记录文档转换时间
     doc_conversion_time = None
@@ -261,7 +272,11 @@ def run_pipeline_with_model(
 
     if verbose:
         print(f"📖 开始解析PDF: {in_path.name}")
-    
+
+    # 测量PDF处理时间
+    pdf_processing_start = time.perf_counter()
+    page_times = []
+
     # 解析每一页
     for page_no, res in tqdm(
         enumerate(
@@ -275,6 +290,7 @@ def run_pipeline_with_model(
         desc="解析页面",
         disable=not verbose
     ):
+        page_start = time.perf_counter()
         pg_idx = res.json["res"].get("page_index", page_no)
         pg_dir = out_root / f"page_{pg_idx:03d}"
         img_dir = pg_dir / "images"
@@ -325,8 +341,20 @@ def run_pipeline_with_model(
             "page_continuation_flags": res.markdown["page_continuation_flags"],
         })
 
-    # 获取时间统计
-    time_stats = dict(pipeline._time_stats) if hasattr(pipeline, '_time_stats') else {}
+        # 记录每页处理时间
+        page_time = (time.perf_counter() - page_start) * 1000
+        page_times.append(page_time)
+
+    # PDF处理总时间
+    pdf_processing_time = (time.perf_counter() - pdf_processing_start) * 1000
+    time_stats['pdf_processing_time'] = pdf_processing_time
+    time_stats['avg_page_time'] = sum(page_times) / len(page_times) if page_times else 0
+    time_stats['total_pages'] = len(page_times)
+
+    # 获取pipeline内部时间统计
+    if hasattr(pipeline, '_time_stats'):
+        pipeline_stats = dict(pipeline._time_stats)
+        time_stats.update({f'pipeline_{k}': v for k, v in pipeline_stats.items()})
 
     # 如果有文档转换时间，添加到统计中
     if doc_conversion_time is not None:
@@ -335,6 +363,8 @@ def run_pipeline_with_model(
     # 合并 Markdown
     if verbose:
         print("📝 合并Markdown...")
+
+    merge_start = time.perf_counter()
     
     merged_md = pipeline.concatenate_markdown_pages(merged_md_parts)
     
@@ -353,6 +383,10 @@ def run_pipeline_with_model(
             print(f"⚠️  合并 Markdown 时出错: {type(e).__name__}，保留原始内容")
 
     (out_root / "merged.md").write_text(merged_md, encoding="utf-8")
+
+    # Markdown合并时间
+    merge_time = (time.perf_counter() - merge_start) * 1000
+    time_stats['markdown_merge_time'] = merge_time
 
     return str(out_root.resolve()), pages_out, time_stats
 
@@ -418,13 +452,45 @@ if __name__ == "__main__":
 
         # 打印时间统计
         if not args.quiet and time_stats:
-            print("\n⏱  时间统计:")
-            for key, value in time_stats.items():
-                if isinstance(value, (int, float)):
-                    print(f"  - {key}: {value:.2f}ms")
-                else:
-                    print(f"  - {key}: {value}")
-            print(f"  - 总耗时: {total_time:.2f}秒")
+            print("\n" + "="*60)
+            print("⏱️  时间统计详情")
+            print("="*60)
+
+            # 分类显示时间统计
+            print("\n【模型加载】")
+            if 'pipeline_load_time' in time_stats:
+                load_time = time_stats['pipeline_load_time']
+                print(f"  Pipeline加载时间: {load_time:.2f}ms ({load_time/1000:.2f}s)")
+
+            if 'doc_conversion' in time_stats:
+                conv_time = time_stats['doc_conversion']
+                print(f"  文档转换时间: {conv_time:.2f}ms ({conv_time/1000:.2f}s)")
+
+            print("\n【页面处理】")
+            if 'total_pages' in time_stats:
+                print(f"  总页数: {time_stats['total_pages']}")
+            if 'pdf_processing_time' in time_stats:
+                proc_time = time_stats['pdf_processing_time']
+                print(f"  PDF处理总时间: {proc_time:.2f}ms ({proc_time/1000:.2f}s)")
+            if 'avg_page_time' in time_stats:
+                print(f"  平均每页处理时间: {time_stats['avg_page_time']:.2f}ms")
+
+            print("\n【后处理】")
+            if 'markdown_merge_time' in time_stats:
+                merge_time = time_stats['markdown_merge_time']
+                print(f"  Markdown合并时间: {merge_time:.2f}ms ({merge_time/1000:.2f}s)")
+
+            # Pipeline内部统计
+            pipeline_stats = {k: v for k, v in time_stats.items() if k.startswith('pipeline_')}
+            if pipeline_stats:
+                print("\n【Pipeline内部统计】")
+                for key, value in sorted(pipeline_stats.items()):
+                    if isinstance(value, (int, float)):
+                        print(f"  {key.replace('pipeline_', '')}: {value:.2f}ms")
+
+            print("\n" + "="*60)
+            print(f"⏱️  总耗时: {total_time:.2f}秒")
+            print("="*60)
 
         print(f"\n✅ 完成！输出目录: {out_dir}")
         
